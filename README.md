@@ -10,3 +10,8 @@
 [Видео пример создания веб серва](https://www.youtube.com/watch?v=mKdwkV5p1xg)     [ Ссылки на конфиги из видео](https://t.me/worlditech/547)
 
 [Документация](https://docs.docker.com/compose/compose-file/compose-file-v3/)
+
+
+[Install Docker Compose](https://docs.docker.com/compose/install/)
+    
+    

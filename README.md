@@ -13,5 +13,7 @@
 
 
 [Install Docker Compose](https://docs.docker.com/compose/install/)
+
+[O Docker Compose](https://habr.com/ru/company/ruvds/blog/450312/)
     
     

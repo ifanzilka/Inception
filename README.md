@@ -18,3 +18,4 @@
     
 [Руководство по Docekr Compose file](https://dker.ru/docs/docker-compose/compose-file-reference/)
     
+ssh bmarilli@localhost -p 4242

@@ -1,0 +1,97 @@
+
+#### Настройка нашего мини сетевого окружения
+# Работает наподобии DNS
+
+### services -> Тут прописываем рахличные параметры
+### container name -> Название контейнера
+### build -> путь к папке с Dockerfile    (можно указать image: и он будет искать докер образ на машине пото на Dockerhub)
+### volumes -> путь которы смотнируем с нашей машины и с сетью
+### networks -> название сети в которой будем работаь
+### depends_on -> устанавдиваем зависимости контейнеров (например wordpress устанавдиваем после БД)
+### ports -> для вытаскивания наружу (HOST: CONTAINER)
+### expose -> Открывайте порты, не публикуя их на хост-машине - они будут доступны только для связанных сервисов. Можно указать только внутренний порт.
+### enviroment -> .env файл берет оттуда переменные окружения (из файла доступны только в docker file но не в контейнерах) и потом указываем что в контейнерах доступно
+
+version: "3.4"
+services:
+    #Nginx Service
+    nginx:
+        restart: always
+        build: ./requirements/nginx
+        container_name: nginx
+        env_file: .env
+        image: nginx
+        depends_on:
+            - wordpress
+        ports:
+            - "443:443"
+        networks:
+            - inception_net
+        volumes:
+        - inception-volume:/var/www/html
+
+    # Mariadb Server
+    mariadb:
+        restart: always
+        build: ./requirements/mariadb
+        container_name: mariadb
+        image: mariadb
+        #healthcheck:
+        #    test: mysqladmin ping -h 127.0.0.1 -u bmarilli --password=dbpass
+        #    interval: 5s
+        #    retries: 10
+        expose:
+            - "3306"
+        networks:
+            - inception_net
+        # Извелчь переменные окружения из файла
+        # Таким образом можно задать список переменных
+        # Примечание: только при запуске контейнера, но не во время сборки
+        env_file: .env
+        volumes:
+        - db-volume:/var/lib/mysql
+
+
+
+    # WordPress
+    wordpress:
+        restart: always
+        build: ./requirements/wordpress
+        container_name: wordpress
+        env_file: .env
+        image: wordpress
+        depends_on:
+            - mariadb
+        expose:
+            - "9000"
+        networks:
+            - inception_net
+        volumes:
+        - inception-volume:/var/www/html
+
+      
+
+### inception_net -> Название Сети  (Прописываем во всех контейнерах)
+networks:
+    inception_net:
+        name: global_name
+        driver: bridge
+
+#Создание томов
+volumes:
+    inception-volume:
+        #Задать имя тому
+        name: inception-volume
+        driver: local
+        driver_opts:
+            type: ext4
+            o: bind
+            device: /home/ifanzilka/Projects21/Inception/data/www
+    
+    db-volume:
+        name: db-volume
+        driver: local
+        driver_opts:
+            type: ext4
+            o: bind
+            device: /home/ifanzilka/Projects21/Inception/data/db

@@ -16,9 +16,14 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -subj "/C=RU/ST=Tatarstan/L=Kazan/O=21/OU=School/CN=localhost"
 
 
+COPY ./conf/site.conf /etc/nginx/sites-available/
+RUN ln -s /etc/nginx/sites-available/site.conf /etc/nginx/sites-enabled/site.conf
+RUN rm /etc/nginx/sites-enabled/default
+
 # copy config
-COPY ./conf/default.conf /etc/nginx/conf.d/
-COPY ./conf/default /etc/nginx/sites-enabled/default
+#COPY ./conf/default.conf /etc/nginx/sites-available/default
+#COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
 
 EXPOSE 443
 

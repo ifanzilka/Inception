@@ -9,9 +9,14 @@ RUN apt-get update && apt-get upgrade -y && \
 
 
 # Перекидываем файл конфигурации
+# говорим что слушаем всех говорим порт и настривам Volume
 COPY ./conf/my.cnf /etc/mysql/my.cnf
 RUN chmod 0444 /etc/mysql/my.cnf
+
+##  Тоже различные настройки
 COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+
+# Скрипт потом для запуска 
 COPY ./tools/mariadb_start.sh /bin/mariadb_start.sh
 EXPOSE 3306
 

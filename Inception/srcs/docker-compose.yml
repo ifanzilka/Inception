@@ -21,6 +21,7 @@ services:
         container_name: nginx
         env_file: .env
         image: nginx
+        # Запускаем после запуска ...
         depends_on:
             - wordpress
         ports:
@@ -52,7 +53,6 @@ services:
         - db-volume:/var/lib/mysql
 
 
-
     # WordPress
     wordpress:
         restart: always
@@ -60,6 +60,7 @@ services:
         container_name: wordpress
         env_file: .env
         image: wordpress
+        # Запускаем после запуска ...
         depends_on:
             - mariadb
         expose:
@@ -79,6 +80,7 @@ networks:
 
 #Создание томов
 volumes:
+    ## Здесб хранится  данные wordpress
     inception-volume:
         #Задать имя тому
         name: inception-volume
@@ -86,12 +88,12 @@ volumes:
         driver_opts:
             type: ext4
             o: bind
-            device: /home/ifanzilka/Projects21/Inception/data/www
-    
+            device: /home/bmarilli/data/www
+    ### Здесь храниться mysql
     db-volume:
         name: db-volume
         driver: local
         driver_opts:
             type: ext4
             o: bind
-            device: /home/ifanzilka/Projects21/Inception/data/db
+            device: /home/bmarilli/data/db

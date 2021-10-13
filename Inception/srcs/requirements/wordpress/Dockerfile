@@ -30,6 +30,7 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 RUN mkdir /var/www
 RUN mkdir /var/www/html
 
+
 COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
 # Установить wordpress в указанную директорию

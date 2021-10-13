@@ -17,6 +17,9 @@ all:generation_envfile dns-host-add
 	sudo docker-compose -f  srcs/docker-compose.yml build     # cобирем все
 	sudo docker-compose -f  srcs/docker-compose.yml up -d 	   # запускаем в фоне
 
+up:
+	sudo docker-compose -f  srcs/docker-compose.yml up -d 
+
 #### Nginx ####
 enter_nginx:
 	sudo docker exec -it nginx /bin/bash
@@ -64,12 +67,15 @@ remote:
 	sudo docker rm $$(sudo docker ps -aq) 2>/dev/null || echo " "
 ## удаляет Volume
 rm_volume:
-	docker volume rm $$(docker volume ls -q)
+	docker volume rm $$(docker volume ls -q)  2>/dev/null || echo " "
 
-сlean:	stop remote rm_volume recreatedir
+rm_network:
+	docker network rm $$(docker network ls -q) 2>/dev/null || echo " "
+
+clean:	stop remote rm_volume  rm_network recreatedir
 	sudo docker rm $$(sudo docker ps -aq) 2>/dev/null || echo " "
 
-fclean:	сlean
+fclean:	clean
 	# удаляет образы
 	sudo docker rmi -f $$(sudo docker images -aq) 2>/dev/null || echo " "
 

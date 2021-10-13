@@ -1,9 +1,14 @@
 # Запускаем СУБД
 
 #для сокет файла
+
+# mysql -p 
+# root
+
+#Warning: World-writable config file '/etc/mysql/mariadb.conf.d/50-server.cnf' is ignored if (--no-defaults) don't
+#mysql -u bmarilli -p 
+
 service mysql start
-
-
 # Проверяем существует ли пользователь, если нет то создаем
 find_my_user=$(echo "SELECT USER from mysql.user;" | mysql --no-defaults -u root | grep "$DB_USER" | wc -l)
 
@@ -23,9 +28,9 @@ if [ "1" -ne $find_my_database ] ;
 	echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root');" | mysql --no-defaults -u root ;
 fi
 
+service mysql stop
 
 # Отключаем, чтобы перезапустить вне фонового режима
-service mysql stop
 
 #ытается запустить исполнимую программу, названную mysqld.
 mysqld_safe
